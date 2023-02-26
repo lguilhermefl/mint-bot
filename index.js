@@ -21,7 +21,7 @@ async function mintNFT(publicKey, privateKey, amountToMint) {
     to: contractAddress,
     nonce: nonce,
     gas: gasAmount + gasMargin,
-    value: weiCost,
+    value: weiCost * amountToMint,
     maxPriorityFeePerGas: 2999999987,
     data: contract.methods.mint(amountToMint).encodeABI(),
     // "mint" is the function name to mint a nft in this contract!
