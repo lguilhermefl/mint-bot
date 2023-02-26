@@ -11,17 +11,18 @@ const contract = new web3.eth.Contract(abi, contractAddress);
 
 async function mintNFT(publicKey, privateKey, amountToMint) {
   const nonce = await web3.eth.getTransactionCount(publicKey, "latest");
+  const value = weiCost * amountToMint;
   const gasAmount = await contract.methods
     .mint(amountToMint)
-    .estimateGas({ from: publicKey, gas: 500000, value: weiCost });
+    .estimateGas({ from: publicKey, gas: 500000, value });
   const gasMargin = Math.round(gasAmount * 0.2);
 
   const tx = {
     from: publicKey,
     to: contractAddress,
-    nonce: nonce,
+    nonce,
     gas: gasAmount + gasMargin,
-    value: weiCost * amountToMint,
+    value,
     maxPriorityFeePerGas: 2999999987,
     data: contract.methods.mint(amountToMint).encodeABI(),
     // "mint" is the function name to mint a nft in this contract!
